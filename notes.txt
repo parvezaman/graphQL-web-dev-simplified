@@ -1,0 +1,23 @@
+1. run a node app (npm init -y);
+2. install packages (npm i express express-graphql graphql), dev dependency (npm --save dev nodemon);
+3. package.json -> script-> start-> nodemon server.js
+4. create a file called server.js
+5. require dependencies and start basic express server
+        const express = require("express");
+        const app = express();
+        const port = 3000;
+        app.listen(port, () => {
+        console.log("the server is running...");
+        });
+
+ 6. require express-graphql dependencies and start the server using
+    const expressGraphQL = require("express-graphql").graphqlHTTP;
+
+        app.use(
+        "/graphql",
+        expressGraphQL({
+            graphiql: true,
+        })
+        );
+
+7. require graphql dependencies (graphqlSchema, graphqlObjectType) and create a schema 
