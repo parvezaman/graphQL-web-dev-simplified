@@ -46,6 +46,12 @@ const AuthorType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLNonNull(GraphQLInt) },
     name: { type: GraphQLNonNull(GraphQLString) },
+    books: {
+      type: new GraphQLList(BookType),
+      resolve: (author) => {
+        return Books.filter((book) => book.authorId === author.id);
+      },
+    },
   }),
 });
 
@@ -70,6 +76,17 @@ const rootQueryType = new GraphQLObjectType({
   name: "Query",
   description: "Root query",
   fields: () => ({
+    // to find single book
+    book: {
+      type: BookType,
+      description: "A single book by Brenet Weeks",
+      args: {
+        id: { type: GraphQLInt },
+      },
+      resolve: (parent, args) => Books.find((book) => args.id === book.id),
+    },
+
+    // to find all books
     Books: {
       type: new GraphQLList(BookType),
       description: "List of all books",
@@ -79,6 +96,15 @@ const rootQueryType = new GraphQLObjectType({
       type: new GraphQLList(AuthorType),
       description: "to get the list of all authors",
       resolve: () => authors,
+    },
+    author: {
+      type: AuthorType,
+      description: "a single author",
+      args: {
+        id: { type: GraphQLInt },
+      },
+      resolve: (parent, args) =>
+        authors.find((author) => args.id === author.id),
     },
   }),
 });
